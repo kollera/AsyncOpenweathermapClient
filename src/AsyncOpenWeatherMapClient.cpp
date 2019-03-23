@@ -35,6 +35,7 @@ boolean AsyncOpenWeatherMapClient::getUVIForecasts(
     sprintf(url,
             "/data/2.5/uvi/forecast?lat=%s&lon=%s&appid=%s&units=%s&lang=%s",
             lat, lon, appId, (metric ? "metric" : "imperial"), language);
+    return get(&uvilistener);
 }
 
 boolean AsyncOpenWeatherMapClient::get(OpenWeatherMapListener *jsonlistener) {
