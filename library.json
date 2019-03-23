@@ -1,0 +1,21 @@
+{
+  "name":"AsyncOpenweathermapClient",
+  "description":"Asynchronous openweathermap client for ESP8266",
+  "keywords":"async,openweathermap",
+  "authors":
+  {
+    "name": "kollera",
+    "maintainer": true
+  },
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/kollera/AsyncOpenweathermapClient.git"
+  },
+  "version": "0.0.1",
+  "frameworks": "arduino",
+  "platforms": "espressif8266",
+  "build": {
+    "libCompatMode": 2
+  }  
+}
