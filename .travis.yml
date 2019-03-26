@@ -4,9 +4,9 @@ os:
   - linux
 
 script:
-  - wget http://downloads.arduino.cc/arduino-1.8.6-linux64.tar.xz
-  - tar xf arduino-1.8.6-linux64.tar.xz
-  - mv arduino-1.8.6 $HOME/arduino_ide
+  - wget http://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz
+  - tar xf arduino-1.8.8-linux64.tar.xz
+  - mv arduino-1.8.8 $HOME/arduino_ide
   - export PATH="$HOME/arduino_ide:$PATH"
   - which arduino
   - mkdir -p $HOME/Arduino/libraries
