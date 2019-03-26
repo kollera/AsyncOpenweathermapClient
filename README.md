@@ -1,4 +1,4 @@
-# AsyncOpenweathermapClient
+# AsyncOpenweathermapClient [![Build Status](https://travis-ci.org/kollera/AsyncOpenweathermapClient.svg?branch=master)](https://travis-ci.org/kollera/AsyncOpenweathermapClient)  
 
 Non-blocking openweathermap client for ESP8266.  
 [https://www.openweathermap.org](https://www.openweathermap.org)
