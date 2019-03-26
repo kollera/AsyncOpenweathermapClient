@@ -22,6 +22,7 @@ script:
   - cd esp8266/tools
   - python get.py
   - source $TRAVIS_BUILD_DIR/travis/common.sh
+  - arduino --install-boards esp8266:esp8266
   - arduino --board esp8266:esp8266:d1_mini:xtal=80 --save-prefs
   - arduino --get-pref sketchbook.path
   - build_sketches arduino $HOME/Arduino/libraries/AsyncOpenweathermapClient esp8266
