@@ -14,6 +14,8 @@ script:
   - which arduino
   - mkdir -p $HOME/Arduino/libraries
   - cp -r $TRAVIS_BUILD_DIR $HOME/Arduino/libraries/AsyncOpenweathermapClient
+  - cd $HOME/Arduino/libraries
+  - git clone https://github.com/thijse/Arduino-Log.git
   - cd $HOME/arduino_ide/hardware
   - mkdir esp8266com
   - cd esp8266com
