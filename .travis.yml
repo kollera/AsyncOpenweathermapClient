@@ -17,7 +17,7 @@ script:
   - cd $HOME/Arduino/libraries
   - git clone https://github.com/thijse/Arduino-Log.git
   - git clone https://github.com/me-no-dev/ESPAsyncTCP.git
-  - git clone https://github.com/bblanchon/ArduinoJson.git
+  - git clone https://github.com/squix78/json-streaming-parser.git
   - cd $HOME/arduino_ide/hardware
   - mkdir esp8266com
   - cd esp8266com
