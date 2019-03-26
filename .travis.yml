@@ -4,10 +4,11 @@ os:
   - linux
 
 script:
-  - wget http://downloads.arduino.cc/arduino-1.8.6-linux64.tar.xz
-  - tar xf arduino-1.8.6-linux64.tar.xz
-  - mv arduino-1.8.6 $HOME/arduino_ide
+  - wget http://downloads.arduino.cc/arduino-1.8.8-linux64.tar.xz
+  - tar xf arduino-1.8.8-linux64.tar.xz
+  - mv arduino-1.8.8 $HOME/arduino_ide
   - export PATH="$HOME/arduino_ide:$PATH"
+  - export ARDUINO_BUILD_FLAGS="xtal=80,vt=flash,exception=disabled,ResetMethod=ck,CrystalFreq=26,FlashFreq=40,FlashMode=dout,eesz=512K,led=2,ip=lm2f,dbg=Disabled,lvl=None____,wipe=none,baud=115200"
   - which arduino
   - mkdir -p $HOME/Arduino/libraries
   - cp -r $TRAVIS_BUILD_DIR $HOME/Arduino/libraries/AsyncOpenweathermapClient
@@ -15,14 +16,12 @@ script:
   - git clone https://github.com/thijse/Arduino-Log.git
   - git clone https://github.com/me-no-dev/ESPAsyncTCP.git
   - git clone https://github.com/squix78/json-streaming-parser.git
-  - cd $HOME/arduino_ide/hardware
-  - mkdir esp8266com
-  - cd esp8266com
-  - git clone https://github.com/esp8266/Arduino.git esp8266
-  - cd esp8266/tools
-  - python get.py
   - source $TRAVIS_BUILD_DIR/travis/common.sh
-  - arduino --board esp8266:esp8266:d1_mini:xtal=80 --save-prefs
+  - arduino --pref "boardsmanager.additional.urls=http://arduino.esp8266.com/stable/package_esp8266com_index.json" --save-prefs 2>&1
+  - arduino --install-boards esp8266:esp8266
+  - arduino --install-library USBHost > /dev/null 2>&1
+  - arduino --board esp8266:esp8266:generic:$ARDUINO_BUILD_FLAGS --save-prefs
+  - arduino --pref "compiler.warning_level=all" --save-prefs
   - arduino --get-pref sketchbook.path
   - build_sketches arduino $HOME/Arduino/libraries/AsyncOpenweathermapClient esp8266
 
