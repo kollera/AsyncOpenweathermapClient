@@ -37,7 +37,7 @@ typedef struct OpenWeatherMapUVIForecastData {
 
 typedef std::function<void(OpenWeatherMapForecastData*, uint8_t)>
     OpenWeatherMapForecastDataCallback;
-typedef std::function<void(OpenWeatherMapUVIForecastData*)>
+typedef std::function<void(OpenWeatherMapUVIForecastData*, uint8_t)>
     OpenWeatherMapUVIForecastDataCallback;
 typedef std::function<void(int)> OpenWeatherMapErrorCallback;
 
@@ -141,6 +141,7 @@ class AOpenWeatherMapUVIForecastListener : public OpenWeatherMapListener {
    private:
     String currentKey;
     String currentParent;
+    uint8_t weatherItemCounter = 0;
     OpenWeatherMapUVIForecastData dataObj;
     OpenWeatherMapUVIForecastData* data;
     OpenWeatherMapUVIForecastDataCallback weatherback = nullptr;
@@ -157,6 +158,7 @@ class AOpenWeatherMapUVIForecastListener : public OpenWeatherMapListener {
 
     void value(String value) {
         if (currentKey == "lat") {
+            weatherItemCounter++;
             data->lat = value.toFloat();
         } else if (currentKey == "lon") {
             data->lon = value.toFloat();
@@ -168,7 +170,7 @@ class AOpenWeatherMapUVIForecastListener : public OpenWeatherMapListener {
 
         if (currentKey == "value") {
             if (weatherback != nullptr) {
-                weatherback(data);
+                weatherback(data,weatherItemCounter);
             }
         }
     }
