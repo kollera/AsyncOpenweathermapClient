@@ -21,6 +21,22 @@ boolean AsyncOpenWeatherMapClient::getForecastsById(
     return get(&listener);
 }
 
+boolean AsyncOpenWeatherMapClient::getForecastsByZip(
+    const char *appId, const char *zip,
+    OpenWeatherMapForecastDataCallback cb,
+    OpenWeatherMapErrorCallback errorcb) {
+    if (isInProgress()) {
+        Log.notice("request pending");
+        return false;
+    }
+    listener.setCb(cb);
+    listener.setErrorCb(errorcb);
+    parser.setListener(&listener);
+    sprintf(url, "/data/2.5/forecast?zip=%s&appid=%s&units=%s&lang=%s",
+            zip, appId, (metric ? "metric" : "imperial"), language);
+    return get(&listener);
+}
+
 boolean AsyncOpenWeatherMapClient::getUVIForecasts(
     const char *appId, const char *lat, const char *lon,
     OpenWeatherMapUVIForecastDataCallback cb,

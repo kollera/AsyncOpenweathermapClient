@@ -211,6 +211,9 @@ class AsyncOpenWeatherMapClient {
     boolean getForecastsById(const char* appId, const char* locationId,
                              OpenWeatherMapForecastDataCallback cb,
                              OpenWeatherMapErrorCallback errorcb);
+    boolean getForecastsByZip(const char* appId, const char* zip_countrycode,
+                             OpenWeatherMapForecastDataCallback cb,
+                             OpenWeatherMapErrorCallback errorcb);
 
     void reset() {
         parser.reset();
