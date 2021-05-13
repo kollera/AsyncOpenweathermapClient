@@ -40,6 +40,8 @@ typedef struct OpenWeatherMapOneCallDailyData {
     uint32_t dt;
     float temp_day;
     float temp_night;
+    float temp_min;
+    float temp_max;
     float pressure;
     float humidity;
     float clouds;
@@ -247,6 +249,10 @@ class AOpenWeatherMapOneCallListener : public OpenWeatherMapListener {
                 data->uvi = value.toFloat();
             } else if (currentKey == "humidity") {
                 data->humidity = value.toFloat();
+            } else if (currentKey == "min") {
+                data->temp_min = value.toFloat();
+            } else if (currentKey == "max") {
+                data->temp_max = value.toFloat();
             }
         }
     }
