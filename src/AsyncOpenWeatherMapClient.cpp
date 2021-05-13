@@ -54,6 +54,24 @@ boolean AsyncOpenWeatherMapClient::getUVIForecasts(
     return get(&uvilistener);
 }
 
+
+boolean AsyncOpenWeatherMapClient::getOneCallForecasts(
+    const char *appId, const char *lat, const char *lon,
+    OpenWeatherMapOneCallDailyDataCallback cb,
+    OpenWeatherMapErrorCallback errorcb) {
+    if (isInProgress()) {
+        Log.notice("request pending");
+        return false;
+    }
+    uvilistener.setCb(cb);
+    uvilistener.setErrorCb(errorcb);
+    parser.setListener(&onecalllistener);
+    sprintf(url,
+            "/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=%s&lang=%s",
+            lat, lon, appId, (metric ? "metric" : "imperial"), language);
+    return get(&onecalllistener);
+}
+
 boolean AsyncOpenWeatherMapClient::get(OpenWeatherMapListener *jsonlistener) {
     reset();
     Log.notice("url: %s\n", url);

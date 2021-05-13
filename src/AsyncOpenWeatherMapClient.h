@@ -6,6 +6,7 @@
 #include <JsonListener.h>
 #include <JsonStreamingParser.h>
 #include <stdio.h>
+
 #include <functional>
 
 typedef struct OpenWeatherMapForecastData {
@@ -35,11 +36,26 @@ typedef struct OpenWeatherMapUVIForecastData {
     float value;
 } OpenWeatherMapUVIForecastData;
 
+typedef struct OpenWeatherMapOneCallDailyData {
+    uint32_t dt;
+    float temp_day;
+    float temp_night;
+    float pressure;
+    float humidity;
+    float clouds;
+    float pop;
+    float rain;
+    float uvi;
+} OpenWeatherMapOneCallDailyData;
+
 typedef std::function<void(OpenWeatherMapForecastData*, uint8_t)>
     OpenWeatherMapForecastDataCallback;
 typedef std::function<void(OpenWeatherMapUVIForecastData*, uint8_t)>
     OpenWeatherMapUVIForecastDataCallback;
 typedef std::function<void(int)> OpenWeatherMapErrorCallback;
+
+typedef std::function<void(OpenWeatherMapOneCallDailyData*, uint8_t)>
+    OpenWeatherMapOneCallDailyDataCallback;
 
 class OpenWeatherMapListener : public JsonListener {
    private:
@@ -170,7 +186,7 @@ class AOpenWeatherMapUVIForecastListener : public OpenWeatherMapListener {
 
         if (currentKey == "value") {
             if (weatherback != nullptr) {
-                weatherback(data,weatherItemCounter);
+                weatherback(data, weatherItemCounter);
             }
         }
     }
@@ -186,10 +202,92 @@ class AOpenWeatherMapUVIForecastListener : public OpenWeatherMapListener {
     void startArray() {}
 };
 
+class AOpenWeatherMapOneCallListener : public OpenWeatherMapListener {
+   private:
+    String currentKey;
+    bool dailyArray;
+    String currentParent;
+    int objcounter = 0;
+    uint8_t weatherItemCounter = 0;
+    OpenWeatherMapOneCallDailyData dataObj;
+    OpenWeatherMapOneCallDailyData* data;
+    OpenWeatherMapOneCallDailyDataCallback weatherback = nullptr;
+
+   public:
+    AOpenWeatherMapOneCallListener() { data = &dataObj; }
+
+    void setCb(OpenWeatherMapOneCallDailyDataCallback cb) { weatherback = cb; }
+    void whitespace(char c) {}
+
+    void startDocument() {
+        objcounter = 0;
+        weatherItemCounter = 0;
+        dailyArray = false;
+    }
+
+    void key(String key) { currentKey = String(key); }
+
+    void value(String value) {
+        if (currentKey == "date") {
+            data->dt = value.toInt();
+        } else if (currentKey == "day") {
+            data->temp_day = value.toFloat();
+        } else if (currentKey == "night") {
+            data->temp_night = value.toFloat();
+        } else if (currentKey == "rain") {
+            data->rain = value.toFloat();
+        } else if (currentKey == "pop") {
+            data->pop = value.toFloat();
+        } else if (currentKey == "clouds") {
+            data->clouds = value.toFloat();
+        } else if (currentKey == "pressure") {
+            data->pressure = value.toFloat();
+        } else if (currentKey == "uvi") {
+            data->uvi = value.toFloat();
+        } else if (currentKey == "humidity") {
+            data->humidity = value.toFloat();
+        }
+    }
+
+    void endArray() {
+        if (dailyArray && objcounter == 0) {
+            dailyArray = false;
+        }
+    }
+
+    void startObject() {
+        currentParent = currentKey;
+        if (dailyArray) {
+            objcounter++;
+        }
+    }
+
+    void endObject() {
+        if (dailyArray) {
+            objcounter--;
+            if (objcounter == 0) {
+                weatherItemCounter++;
+                if (weatherback != nullptr) {
+                    weatherback(data, weatherItemCounter);
+                }
+            }
+        }
+    }
+
+    void endDocument() {}
+
+    void startArray() {
+        if (currentKey == "daily") {
+            dailyArray = true;
+        }
+    }
+};
+
 class AsyncOpenWeatherMapClient {
    private:
     AOpenWeatherMapForecastListener listener;
     AOpenWeatherMapUVIForecastListener uvilistener;
+    AOpenWeatherMapOneCallListener onecalllistener;
     boolean metric = true;
     const char* language = "en";
     JsonStreamingParser parser;
@@ -212,8 +310,11 @@ class AsyncOpenWeatherMapClient {
                              OpenWeatherMapForecastDataCallback cb,
                              OpenWeatherMapErrorCallback errorcb);
     boolean getForecastsByZip(const char* appId, const char* zip_countrycode,
-                             OpenWeatherMapForecastDataCallback cb,
-                             OpenWeatherMapErrorCallback errorcb);
+                              OpenWeatherMapForecastDataCallback cb,
+                              OpenWeatherMapErrorCallback errorcb);
+    boolean getOneCallForecasts(const char* appId, const char* zip_countrycode,
+                                OpenWeatherMapOneCallDailyDataCallback cb,
+                                OpenWeatherMapErrorCallback errorcb);
 
     void reset() {
         parser.reset();
