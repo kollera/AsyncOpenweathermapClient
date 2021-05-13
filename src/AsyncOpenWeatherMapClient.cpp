@@ -63,8 +63,8 @@ boolean AsyncOpenWeatherMapClient::getOneCallForecasts(
         Log.notice("request pending");
         return false;
     }
-    uvilistener.setCb(cb);
-    uvilistener.setErrorCb(errorcb);
+    onecalllistener.setCb(cb);
+    onecalllistener.setErrorCb(errorcb);
     parser.setListener(&onecalllistener);
     sprintf(url,
             "/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=%s&lang=%s",

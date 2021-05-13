@@ -228,24 +228,26 @@ class AOpenWeatherMapOneCallListener : public OpenWeatherMapListener {
     void key(String key) { currentKey = String(key); }
 
     void value(String value) {
-        if (currentKey == "date") {
-            data->dt = value.toInt();
-        } else if (currentKey == "day") {
-            data->temp_day = value.toFloat();
-        } else if (currentKey == "night") {
-            data->temp_night = value.toFloat();
-        } else if (currentKey == "rain") {
-            data->rain = value.toFloat();
-        } else if (currentKey == "pop") {
-            data->pop = value.toFloat();
-        } else if (currentKey == "clouds") {
-            data->clouds = value.toFloat();
-        } else if (currentKey == "pressure") {
-            data->pressure = value.toFloat();
-        } else if (currentKey == "uvi") {
-            data->uvi = value.toFloat();
-        } else if (currentKey == "humidity") {
-            data->humidity = value.toFloat();
+        if (dailyArray) {
+            if (currentKey == "dt") {
+                data->dt = value.toInt();
+            } else if (currentKey == "day") {
+                data->temp_day = value.toFloat();
+            } else if (currentKey == "night") {
+                data->temp_night = value.toFloat();
+            } else if (currentKey == "rain") {
+                data->rain = value.toFloat();
+            } else if (currentKey == "pop") {
+                data->pop = value.toFloat();
+            } else if (currentKey == "clouds") {
+                data->clouds = value.toFloat();
+            } else if (currentKey == "pressure") {
+                data->pressure = value.toFloat();
+            } else if (currentKey == "uvi") {
+                data->uvi = value.toFloat();
+            } else if (currentKey == "humidity") {
+                data->humidity = value.toFloat();
+            }
         }
     }
 
@@ -312,7 +314,8 @@ class AsyncOpenWeatherMapClient {
     boolean getForecastsByZip(const char* appId, const char* zip_countrycode,
                               OpenWeatherMapForecastDataCallback cb,
                               OpenWeatherMapErrorCallback errorcb);
-    boolean getOneCallForecasts(const char* appId, const char* zip_countrycode,
+    boolean getOneCallForecasts(const char* appId, const char* lat,
+                                const char* lon,
                                 OpenWeatherMapOneCallDailyDataCallback cb,
                                 OpenWeatherMapErrorCallback errorcb);
 
