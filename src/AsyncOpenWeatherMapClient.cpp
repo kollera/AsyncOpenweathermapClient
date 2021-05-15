@@ -3,8 +3,6 @@
 #include <ESPAsyncTCP.h>
 #include <WiFiClient.h>
 
-AsyncOpenWeatherMapClient::AsyncOpenWeatherMapClient() {}
-
 boolean AsyncOpenWeatherMapClient::getForecastsById(
     const char *appId, const char *locationId,
     OpenWeatherMapForecastDataCallback cb,

@@ -303,7 +303,7 @@ class AsyncOpenWeatherMapClient {
     int statuscode = 0;
     boolean inProgress = false;
     char url[96];
-    char* _hostname = "api.openweathermap.org";
+    const char* _hostname;
 
     boolean get(OpenWeatherMapListener* jsonlistener);
     void setInProgress() { inProgress = true; }
@@ -311,7 +311,9 @@ class AsyncOpenWeatherMapClient {
     boolean isInProgress() { return inProgress; }
 
    public:
-    AsyncOpenWeatherMapClient();
+    AsyncOpenWeatherMapClient() {
+	_hostname = "api.openweathermap.org";
+    }
     AsyncOpenWeatherMapClient(const char* hostname) {
         _hostname = hostname;
     }
