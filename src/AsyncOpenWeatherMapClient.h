@@ -303,6 +303,7 @@ class AsyncOpenWeatherMapClient {
     int statuscode = 0;
     boolean inProgress = false;
     char url[96];
+    char* _hostname = "api.openweathermap.org";
 
     boolean get(OpenWeatherMapListener* jsonlistener);
     void setInProgress() { inProgress = true; }
@@ -311,6 +312,9 @@ class AsyncOpenWeatherMapClient {
 
    public:
     AsyncOpenWeatherMapClient();
+    AsyncOpenWeatherMapClient(const char* hostname) {
+        _hostname = hostname;
+    }
     boolean getUVIForecasts(const char* appId, const char* lat, const char* lon,
                             OpenWeatherMapUVIForecastDataCallback cb,
                             OpenWeatherMapErrorCallback errorcb);

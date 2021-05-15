@@ -142,11 +142,13 @@ boolean AsyncOpenWeatherMapClient::get(OpenWeatherMapListener *jsonlistener) {
             Log.notice("client url: %s\n", this->url);
             client->write("GET ");
             client->write(this->url);
-            client->write(" HTTP/1.0\r\nHost: api.openweathermap.org\r\n\r\n");
+            client->write(" HTTP/1.0\r\nHost: ");
+            client->write(_hostname);
+            client->write("\r\n\r\n");
         },
         NULL);
 
-    if (!aClient->connect("api.openweathermap.org", 80)) {
+    if (!aClient->connect(_hostname, 80)) {
         Log.notice("Connect Fail");
         AsyncClient *client = aClient;
         aClient = NULL;
