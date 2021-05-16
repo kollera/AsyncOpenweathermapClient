@@ -65,7 +65,7 @@ boolean AsyncOpenWeatherMapClient::getOneCallForecasts(
     onecalllistener.setErrorCb(errorcb);
     parser.setListener(&onecalllistener);
     sprintf(url,
-            "/data/2.5/onecall?lat=%s&lon=%s&appid=%s&units=%s&lang=%s",
+            (const char*) onecalllistener.getUrlTemplate(),
             lat, lon, appId, (metric ? "metric" : "imperial"), language);
     return get(&onecalllistener);
 }

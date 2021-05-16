@@ -214,9 +214,17 @@ class AOpenWeatherMapOneCallListener : public OpenWeatherMapListener {
     OpenWeatherMapOneCallDailyData dataObj;
     OpenWeatherMapOneCallDailyData* data;
     OpenWeatherMapOneCallDailyDataCallback weatherback = nullptr;
+    char* _urltemplate = "";
 
    public:
     AOpenWeatherMapOneCallListener() { data = &dataObj; }
+
+    void setUrlTemplate(char* urltemplate) {
+        _urltemplate = urltemplate;
+    }
+    char* getUrlTemplate() {
+        get _urltemplate;
+    }
 
     void setCb(OpenWeatherMapOneCallDailyDataCallback cb) { weatherback = cb; }
     void whitespace(char c) {}
