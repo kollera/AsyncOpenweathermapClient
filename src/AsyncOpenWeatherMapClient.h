@@ -223,7 +223,7 @@ class AOpenWeatherMapOneCallListener : public OpenWeatherMapListener {
         _urltemplate = urltemplate;
     }
     char* getUrlTemplate() {
-        get _urltemplate;
+        return _urltemplate;
     }
 
     void setCb(OpenWeatherMapOneCallDailyDataCallback cb) { weatherback = cb; }
